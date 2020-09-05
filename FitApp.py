@@ -54,9 +54,21 @@ class ButtonsPage(BoxLayout):
                 app.set_counter += 1
                 print(f"Counter increased to {app.set_counter}")
                 if app.set_counter == 4:
-                    app.set_counter = 1    
+                    app.set_counter = 1
+                    app.overall_training[app.current_exercise] = app.chinup_stats
                     app.screen_manager.current = "Exercises"
-            print(app.chinup_stats)
+                    print(app.overall_training)
+            if app.current_exercise == "Bench press":
+                app.bench_stats[app.set_counter] = self.entered_reps.text
+                self.entered_reps.text = ""
+                print(f"Current set: {app.set_counter}")
+                app.set_counter += 1
+                print(f"Counter increased to {app.set_counter}")
+                if app.set_counter == 4:
+                    app.set_counter = 1
+                    app.overall_training[app.current_exercise] = app.bench_stats
+                    app.screen_manager.current = "Exercises"
+                    print(app.overall_training)
         else:
             self.entered_reps.text += button_pressed
 
@@ -110,7 +122,8 @@ class DatePage(BoxLayout):
         if button_pressed == "Enter":
             # tady dodelat datum
             app.todays_date = self.entered_date.text
-            print(app.todays_date)
+            app.overall_training["Date"] = app.todays_date
+            print(app.overall_training)
             app.screen_manager.current = "Exercises"
         else:
             self.entered_date.text += button_pressed 
