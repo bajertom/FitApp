@@ -1,3 +1,7 @@
+"""Jeste tam strcit vahu, cili po Exercise se zeptat na vahu a pak pokracovat na sets/reps. Pridat do 
+Buttons cudlik na zmenu vahy, ta se pak nove zapise do noveho setu, jinak zustane stejna."""
+
+
 import csv
 import os
 import kivy
@@ -26,10 +30,10 @@ class ButtonsPage(BoxLayout):
         self.add_widget(self.entered_reps)
 
         buttons = [
-            ["7", "8", "9"],
-            ["4", "5", "6"],
-            ["1", "2", "3"],
-            ["C", "0", "ENTER"]
+            ["1", "2", "3", "Weight"],
+            ["4", "5", "6", "Exercises"],
+            ["7", "8", "9", "."],
+            ["C", "0", "ENTER", "Timer"]
             ]
 
         for row in buttons:
@@ -44,31 +48,31 @@ class ButtonsPage(BoxLayout):
     def on_button_press(self, instance):
         button_pressed = instance.text 
         
+        # exercises = ["Chin-up", "Bench press", "Squat",
+        #              "Deadlift", "Row", "Farmer"]
+
+
         if button_pressed == "C":
             self.entered_reps.text = ""
+
+        elif button_pressed == "Exercises":
+            app.screen_manager.current = "Exercises"
+        elif button_pressed == "Weight":
+            app.screen_manager.current = "Weight"
         elif button_pressed == "ENTER":
-            if app.current_exercise == "Chin-up":
-                app.chinup_stats[app.set_counter] = self.entered_reps.text
-                self.entered_reps.text = ""
-                print(f"Current set: {app.set_counter}")
-                app.set_counter += 1
-                print(f"Counter increased to {app.set_counter}")
-                if app.set_counter == 4:
-                    app.set_counter = 1
-                    app.overall_training[app.current_exercise] = app.chinup_stats
-                    app.screen_manager.current = "Exercises"
-                    print(app.overall_training)
-            if app.current_exercise == "Bench press":
-                app.bench_stats[app.set_counter] = self.entered_reps.text
-                self.entered_reps.text = ""
-                print(f"Current set: {app.set_counter}")
-                app.set_counter += 1
-                print(f"Counter increased to {app.set_counter}")
-                if app.set_counter == 4:
-                    app.set_counter = 1
-                    app.overall_training[app.current_exercise] = app.bench_stats
-                    app.screen_manager.current = "Exercises"
-                    print(app.overall_training)
+        # if app.current_exercise in exercises:
+            app.current_exercise_dict[app.set_counter] = (app.weight, self.entered_reps.text)
+            print(f"Current set: {app.set_counter}, number of reps: {self.entered_reps.text}")
+            self.entered_reps.text = ""
+            app.set_counter += 1
+            # print(f"Counter increased to {app.set_counter}")
+            if app.set_counter == 4:
+                app.set_counter = 1
+                app.overall_training[app.current_exercise] = app.current_exercise_dict
+                app.current_exercise_dict = {}
+                app.screen_manager.current = "Exercises"
+                print(app.overall_training)
+                # print("tady")
         else:
             self.entered_reps.text += button_pressed
 
@@ -91,7 +95,7 @@ class Exercises(GridLayout):
     def on_exercise_press(self, instance):
         print(instance.text)
         app.current_exercise = instance.text
-        app.screen_manager.current = "Buttons"
+        app.screen_manager.current = "Weight"
 
 
 class DatePage(BoxLayout):
@@ -117,6 +121,7 @@ class DatePage(BoxLayout):
             main_layout.add_widget(h_layout)
         self.add_widget(main_layout)
 
+
     def on_button_press_date(self,instance):
         button_pressed = instance.text
         if button_pressed == "Enter":
@@ -129,23 +134,52 @@ class DatePage(BoxLayout):
             self.entered_date.text += button_pressed 
 
 
-    # def date_inserted(self, instance):
-    #     # with open(database_path, "a") as database:
-    #     MainApp().date = instance
-    #     # print(MainApp().date)
-    #     app.screen_manager.current = "Exercises"
+class WeightPage(BoxLayout):
+    def __init__(self):
+        super().__init__()
+        self.orientation = "vertical"
+
+
+        self.weight_label = Label(text="Insert weight")
+        self.add_widget(self.weight_label)
+
+        self.entered_weight = TextInput(multiline=False,readonly=True,halign="center",
+            font_size=55)
+        self.add_widget(self.entered_weight)
+
+        buttons = [["1", "2", "3", "4", "5", "6"], ["7", "8", "9", "0", ".", "Enter"]]
+        main_layout = BoxLayout(orientation="vertical")
+        for row in buttons:
+            h_layout = BoxLayout()
+            for number in row:
+                button = Button(text=number)
+                button.bind(on_press=self.on_button_press_weight)
+                h_layout.add_widget(button)
+            main_layout.add_widget(h_layout)
+        self.add_widget(main_layout)
+
+
+    def on_button_press_weight(self, instance):
+        button_pressed = instance.text
+        if button_pressed == "Enter":
+            app.weight = self.entered_weight.text
+            # app.overall_training["Date"] = app.todays_date
+            print(app.overall_training)
+            self.entered_weight.text = ""
+            app.screen_manager.current = "Buttons"
+        else:
+            self.entered_weight.text += button_pressed 
+
 
 class MainApp(App):
     set_counter = 1
     current_exercise = ""
     todays_date = ""
+    weight = ""
     overall_training = {}
-    chinup_stats = {}
-    deadlift_stats = {}
-    bench_stats = {}
-    squat_stats = {}
-    row_stats = {}
-    farmer_stats = {}
+    current_exercise_dict = {}
+
+
     def build(self):
 
         self.screen_manager = ScreenManager()
@@ -163,6 +197,11 @@ class MainApp(App):
         
         self.buttons_page = ButtonsPage()
         screen = Screen(name="Buttons")
+        screen.add_widget(self.buttons_page)
+        self.screen_manager.add_widget(screen)
+
+        self.buttons_page = WeightPage()
+        screen = Screen(name="Weight")
         screen.add_widget(self.buttons_page)
         self.screen_manager.add_widget(screen)
 
