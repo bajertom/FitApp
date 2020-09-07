@@ -1,7 +1,3 @@
-"""Jeste tam strcit vahu, cili po Exercise se zeptat na vahu a pak pokracovat na sets/reps. Pridat do 
-Buttons cudlik na zmenu vahy, ta se pak nove zapise do noveho setu, jinak zustane stejna."""
-
-
 import csv
 import os
 import kivy
@@ -15,12 +11,33 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 
 database_path = "C:\\Study\\Environments\\FitApp\\database.csv"
 if not os.path.exists(database_path):
-    with open(database_path, "w") as database:
+    with open(database_path, "w",newline="") as database:
         fieldnames = ["Date", "Chin-up", "Bench press", "Squat",
                      "Deadlift", "Row", "Farmer"]
         writer = csv.DictWriter(database,fieldnames=fieldnames)
         writer.writeheader()
 
+
+class StartExitPage(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.orientation = "vertical"
+        
+        self.start_button = Button(text="Start Training")
+        self.start_button.bind(on_press=self.start_training)
+        self.add_widget(self.start_button)
+
+        self.quit_button = Button(text="Quit app")
+        self.quit_button.bind(on_press=self.quit_app)
+        self.add_widget(self.quit_button)
+
+
+    def start_training(self,_):
+        app.screen_manager.current = "Date"
+
+
+    def quit_app(self,_):
+        app.stop()
 
 class ButtonsPage(BoxLayout):
     def __init__(self, **kwargs):
@@ -56,6 +73,8 @@ class ButtonsPage(BoxLayout):
             self.entered_reps.text = ""
 
         elif button_pressed == "Exercises":
+            app.current_exercise_dict = {}
+            app.set_counter = 1
             app.screen_manager.current = "Exercises"
         elif button_pressed == "Weight":
             app.screen_manager.current = "Weight"
@@ -72,7 +91,16 @@ class ButtonsPage(BoxLayout):
                 app.current_exercise_dict = {}
                 app.screen_manager.current = "Exercises"
                 print(app.overall_training)
+                print(len(app.overall_training))
                 # print("tady")
+
+            if len(app.overall_training) == 7:
+                with open(database_path, "a",newline="") as database:
+                    fieldnames = ["Date", "Chin-up", "Bench press", "Squat",
+                                 "Deadlift", "Row", "Farmer"]
+                    writer = csv.DictWriter(database,fieldnames=fieldnames)
+                    writer.writerow(app.overall_training)
+                app.stop()
         else:
             self.entered_reps.text += button_pressed
 
@@ -183,6 +211,11 @@ class MainApp(App):
     def build(self):
 
         self.screen_manager = ScreenManager()
+
+        self.start_exit_page = StartExitPage()
+        screen = Screen(name="StartExit")
+        screen.add_widget(self.start_exit_page)
+        self.screen_manager.add_widget(screen)
 
         self.date_page = DatePage()
         screen = Screen(name="Date")
