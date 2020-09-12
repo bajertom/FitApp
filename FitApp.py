@@ -39,10 +39,129 @@ class StartExitPage(BoxLayout):
     def quit_app(self,_):
         app.stop()
 
+
+class DatePage(BoxLayout):
+    def __init__(self):
+        super().__init__()
+        self.orientation = "vertical"
+
+        self.date_label = Label(text="Insert today's date in DD.MM.YYYY format")
+        self.add_widget(self.date_label)
+
+        self.entered_date = TextInput(multiline=False,readonly=True,halign="center",
+            font_size=55)
+        self.add_widget(self.entered_date)
+
+        buttons = [["1", "2", "3", "4", "5", "6", "Back"], ["7", "8", "9", "0", ".", "C","Enter"]]
+        main_layout = BoxLayout(orientation="vertical")
+        for row in buttons:
+            h_layout = BoxLayout()
+            for number in row:
+                button = Button(text=number)
+                button.bind(on_press=self.on_button_press_date)
+                h_layout.add_widget(button)
+            main_layout.add_widget(h_layout)
+        self.add_widget(main_layout)
+
+
+    def on_button_press_date(self,instance):
+        button_pressed = instance.text
+        if button_pressed == "Enter":
+            app.todays_date = self.entered_date.text
+            app.overall_training["Date"] = app.todays_date
+            print(app.overall_training)
+            print(app.last_training)
+            app.screen_manager.current = "Exercises"
+            # if len(self.entered_date.text) != 10:
+            #     pass
+            # else:
+            #     app.todays_date = self.entered_date.text
+            #     app.overall_training["Date"] = app.todays_date
+            #     print(app.overall_training)
+            #     print(app.last_training)
+            #     app.screen_manager.current = "Exercises"
+        elif button_pressed == "C":
+            self.entered_date.text = ""
+        elif button_pressed == "Back":
+            app.screen_manager.current = "StartExit"
+        else:
+            self.entered_date.text += button_pressed
+
+class Exercises(GridLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.cols = 3
+
+        exercises = ["Chin-up", "Bench press", "Squat",
+                     "Deadlift", "Row", "Farmer"]
+        for exercise in exercises:
+            exercise_button = Button(text=exercise)
+            self.add_widget(exercise_button)
+            exercise_button.bind(on_press=self.on_exercise_press)
+
+
+    def on_exercise_press(self, instance):
+        print(instance.text)
+        app.current_exercise = instance.text
+        app.buttons_page.last_training_displayed.text = app.last_training[instance.text]
+        app.screen_manager.current = "Weight"
+
+
+
+class WeightPage(BoxLayout):
+    def __init__(self):
+        super().__init__()
+        self.orientation = "vertical"
+
+
+        self.weight_label = Label(text="Insert weight")
+        self.add_widget(self.weight_label)
+
+        self.entered_weight = TextInput(multiline=False,readonly=True,halign="center",
+            font_size=55)
+        self.add_widget(self.entered_weight)
+
+        buttons = [["1", "2", "3", "4", "5", "6","Exercises"], ["7", "8", "9", "0", ".","C","Enter"]]
+        main_layout = BoxLayout(orientation="vertical")
+        for row in buttons:
+            h_layout = BoxLayout()
+            for number in row:
+                button = Button(text=number)
+                button.bind(on_press=self.on_button_press_weight)
+                h_layout.add_widget(button)
+            main_layout.add_widget(h_layout)
+        self.add_widget(main_layout)
+
+
+    def on_button_press_weight(self, instance):
+        button_pressed = instance.text
+        if button_pressed == "Enter":
+            app.weight = self.entered_weight.text
+            print(app.overall_training)
+            self.entered_weight.text = ""
+            app.screen_manager.current = "Buttons"
+        elif button_pressed == "C":
+            self.entered_weight.text = ""
+        elif button_pressed == "Exercises":
+            self.entered_weight.text = ""
+            app.screen_manager.current = "Exercises"
+        else:
+            self.entered_weight.text += button_pressed 
+
+
+
 class ButtonsPage(BoxLayout):
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.orientation = "vertical"
+
+        # self.last_training_displayed = TextInput(multiline=False,readonly=True,halign="right",font_size=55)
+        # self.add_widget(self.last_training_displayed)
+
+        self.last_training_displayed = Label(font_size=30)
+        self.add_widget(self.last_training_displayed)
+
         self.entered_reps = TextInput(multiline=False,readonly=True,halign="right",font_size=55)
         self.add_widget(self.entered_reps)
 
@@ -64,10 +183,6 @@ class ButtonsPage(BoxLayout):
 
     def on_button_press(self, instance):
         button_pressed = instance.text 
-        
-        # exercises = ["Chin-up", "Bench press", "Squat",
-        #              "Deadlift", "Row", "Farmer"]
-
 
         if button_pressed == "C":
             self.entered_reps.text = ""
@@ -79,20 +194,17 @@ class ButtonsPage(BoxLayout):
         elif button_pressed == "Weight":
             app.screen_manager.current = "Weight"
         elif button_pressed == "ENTER":
-        # if app.current_exercise in exercises:
             app.current_exercise_dict[app.set_counter] = (app.weight, self.entered_reps.text)
             print(f"Current set: {app.set_counter}, number of reps: {self.entered_reps.text}")
             self.entered_reps.text = ""
             app.set_counter += 1
-            # print(f"Counter increased to {app.set_counter}")
             if app.set_counter == 4:
                 app.set_counter = 1
                 app.overall_training[app.current_exercise] = app.current_exercise_dict
                 app.current_exercise_dict = {}
                 app.screen_manager.current = "Exercises"
                 print(app.overall_training)
-                print(len(app.overall_training))
-                # print("tady")
+                # print(len(app.overall_training))
 
             if len(app.overall_training) == 7:
                 with open(database_path, "a",newline="") as database:
@@ -105,100 +217,6 @@ class ButtonsPage(BoxLayout):
             self.entered_reps.text += button_pressed
 
 
-
-
-class Exercises(GridLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.cols = 3
-
-        exercises = ["Chin-up", "Bench press", "Squat",
-                     "Deadlift", "Row", "Farmer"]
-        for exercise in exercises:
-            exercise_button = Button(text=exercise)
-            self.add_widget(exercise_button)
-            exercise_button.bind(on_press=self.on_exercise_press)
-
-
-    def on_exercise_press(self, instance):
-        print(instance.text)
-        app.current_exercise = instance.text
-        app.screen_manager.current = "Weight"
-
-
-class DatePage(BoxLayout):
-    def __init__(self):
-        super().__init__()
-        self.orientation = "vertical"
-
-        self.date_label = Label(text="Insert today's date")
-        self.add_widget(self.date_label)
-
-        self.entered_date = TextInput(multiline=False,readonly=True,halign="center",
-            font_size=55)
-        self.add_widget(self.entered_date)
-
-        buttons = [["1", "2", "3", "4", "5", "6"], ["7", "8", "9", "0", ".", "Enter"]]
-        main_layout = BoxLayout(orientation="vertical")
-        for row in buttons:
-            h_layout = BoxLayout()
-            for number in row:
-                button = Button(text=number)
-                button.bind(on_press=self.on_button_press_date)
-                h_layout.add_widget(button)
-            main_layout.add_widget(h_layout)
-        self.add_widget(main_layout)
-
-
-    def on_button_press_date(self,instance):
-        button_pressed = instance.text
-        if button_pressed == "Enter":
-            # tady dodelat datum
-            app.todays_date = self.entered_date.text
-            app.overall_training["Date"] = app.todays_date
-            print(app.overall_training)
-            app.screen_manager.current = "Exercises"
-        else:
-            self.entered_date.text += button_pressed 
-
-
-class WeightPage(BoxLayout):
-    def __init__(self):
-        super().__init__()
-        self.orientation = "vertical"
-
-
-        self.weight_label = Label(text="Insert weight")
-        self.add_widget(self.weight_label)
-
-        self.entered_weight = TextInput(multiline=False,readonly=True,halign="center",
-            font_size=55)
-        self.add_widget(self.entered_weight)
-
-        buttons = [["1", "2", "3", "4", "5", "6"], ["7", "8", "9", "0", ".", "Enter"]]
-        main_layout = BoxLayout(orientation="vertical")
-        for row in buttons:
-            h_layout = BoxLayout()
-            for number in row:
-                button = Button(text=number)
-                button.bind(on_press=self.on_button_press_weight)
-                h_layout.add_widget(button)
-            main_layout.add_widget(h_layout)
-        self.add_widget(main_layout)
-
-
-    def on_button_press_weight(self, instance):
-        button_pressed = instance.text
-        if button_pressed == "Enter":
-            app.weight = self.entered_weight.text
-            # app.overall_training["Date"] = app.todays_date
-            print(app.overall_training)
-            self.entered_weight.text = ""
-            app.screen_manager.current = "Buttons"
-        else:
-            self.entered_weight.text += button_pressed 
-
-
 class MainApp(App):
     set_counter = 1
     current_exercise = ""
@@ -206,9 +224,16 @@ class MainApp(App):
     weight = ""
     overall_training = {}
     current_exercise_dict = {}
+    last_training = {}
+
+
 
 
     def build(self):
+        with open(database_path, "r",newline="") as database:
+            reader = csv.DictReader(database)
+            for row in reader:
+                self.last_training = row
 
         self.screen_manager = ScreenManager()
 
@@ -221,7 +246,6 @@ class MainApp(App):
         screen = Screen(name="Date")
         screen.add_widget(self.date_page)
         self.screen_manager.add_widget(screen)
-
         
         self.exercises = Exercises()
         screen = Screen(name='Exercises')
@@ -233,9 +257,9 @@ class MainApp(App):
         screen.add_widget(self.buttons_page)
         self.screen_manager.add_widget(screen)
 
-        self.buttons_page = WeightPage()
+        self.weight_page = WeightPage()
         screen = Screen(name="Weight")
-        screen.add_widget(self.buttons_page)
+        screen.add_widget(self.weight_page)
         self.screen_manager.add_widget(screen)
 
         return self.screen_manager
