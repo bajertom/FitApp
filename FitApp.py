@@ -1,5 +1,6 @@
 import csv
 import os
+import ast
 import kivy
 from kivy.app import App
 from kivy.uix.label import Label
@@ -70,7 +71,7 @@ class DatePage(BoxLayout):
             app.todays_date = self.entered_date.text
             app.overall_training["Date"] = app.todays_date
             print(app.overall_training)
-            print(app.last_training)
+            print(app.previous_training)
             app.screen_manager.current = "Exercises"
             # if len(self.entered_date.text) != 10:
             #     pass
@@ -78,7 +79,7 @@ class DatePage(BoxLayout):
             #     app.todays_date = self.entered_date.text
             #     app.overall_training["Date"] = app.todays_date
             #     print(app.overall_training)
-            #     print(app.last_training)
+            #     print(app.previous_training)
             #     app.screen_manager.current = "Exercises"
         elif button_pressed == "C":
             self.entered_date.text = ""
@@ -95,15 +96,21 @@ class Exercises(GridLayout):
         exercises = ["Chin-up", "Bench press", "Squat",
                      "Deadlift", "Row", "Farmer"]
         for exercise in exercises:
-            exercise_button = Button(text=exercise)
+            previous_set_rep = ast.literal_eval(app.previous_training[exercise])[1]
+            # print(slovnik)
+            # print(type(slovnik))
+            exercise_button = Button(text=f"{exercise}\n\nWeight: {previous_set_rep[0]}\nReps: {previous_set_rep[1]}",
+                halign="center")
             self.add_widget(exercise_button)
             exercise_button.bind(on_press=self.on_exercise_press)
 
 
     def on_exercise_press(self, instance):
-        print(instance.text)
-        app.current_exercise = instance.text
-        app.buttons_page.last_training_displayed.text = app.last_training[instance.text]
+        print(instance.text.split("\n")[0])
+        app.current_exercise = instance.text.split("\n")[0]
+        app.buttons_page.last_training_displayed.text = app.previous_training[instance.text.split("\n")[0]]
+        print(type(app.buttons_page.last_training_displayed.text))
+        
         app.screen_manager.current = "Weight"
 
 
@@ -156,10 +163,7 @@ class ButtonsPage(BoxLayout):
         super().__init__(**kwargs)
         self.orientation = "vertical"
 
-        # self.last_training_displayed = TextInput(multiline=False,readonly=True,halign="right",font_size=55)
-        # self.add_widget(self.last_training_displayed)
-
-        self.last_training_displayed = Label(font_size=30)
+        self.last_training_displayed = Label(font_size=30,halign="center")
         self.add_widget(self.last_training_displayed)
 
         self.entered_reps = TextInput(multiline=False,readonly=True,halign="right",font_size=55)
@@ -224,7 +228,8 @@ class MainApp(App):
     weight = ""
     overall_training = {}
     current_exercise_dict = {}
-    last_training = {}
+    previous_training = {}
+    # print(type(previous_training))
 
 
 
@@ -233,7 +238,8 @@ class MainApp(App):
         with open(database_path, "r",newline="") as database:
             reader = csv.DictReader(database)
             for row in reader:
-                self.last_training = row
+                self.previous_training = row
+                # print(type(self.previous_training))
 
         self.screen_manager = ScreenManager()
 
