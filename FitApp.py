@@ -70,8 +70,8 @@ class DatePage(BoxLayout):
         if button_pressed == "Enter":
             app.todays_date = self.entered_date.text
             app.overall_training["Date"] = app.todays_date
-            print(app.overall_training)
-            print(app.previous_training)
+            # print(app.overall_training)
+            # print(app.previous_training)
             app.screen_manager.current = "Exercises"
             # if len(self.entered_date.text) != 10:
             #     pass
@@ -106,10 +106,16 @@ class Exercises(GridLayout):
 
 
     def on_exercise_press(self, instance):
-        print(instance.text.split("\n")[0])
+        # print(instance.text.split("\n")[0])
         app.current_exercise = instance.text.split("\n")[0]
-        app.buttons_page.last_training_displayed.text = app.previous_training[instance.text.split("\n")[0]]
-        print(type(app.buttons_page.last_training_displayed.text))
+        dicted_previous_training = ast.literal_eval(app.previous_training[instance.text.split("\n")[0]])
+        dicted_previous_training_stringed = (
+        f"{dicted_previous_training[1][0]}: {dicted_previous_training[1][1]}    "
+        f"{dicted_previous_training[2][0]}: {dicted_previous_training[2][1]}    "
+        f"{dicted_previous_training[3][0]}: {dicted_previous_training[3][1]}    ")
+        # print(dicted_previous_training_stringed)
+        app.buttons_page.last_training_displayed.text = f"Last training weights and reps:\n{dicted_previous_training_stringed}"
+        # print(type(app.buttons_page.last_training_displayed.text))
         
         app.screen_manager.current = "Weight"
 
@@ -144,7 +150,7 @@ class WeightPage(BoxLayout):
         button_pressed = instance.text
         if button_pressed == "Enter":
             app.weight = self.entered_weight.text
-            print(app.overall_training)
+            # print(app.overall_training)
             self.entered_weight.text = ""
             app.screen_manager.current = "Buttons"
         elif button_pressed == "C":
@@ -199,7 +205,7 @@ class ButtonsPage(BoxLayout):
             app.screen_manager.current = "Weight"
         elif button_pressed == "ENTER":
             app.current_exercise_dict[app.set_counter] = (app.weight, self.entered_reps.text)
-            print(f"Current set: {app.set_counter}, number of reps: {self.entered_reps.text}")
+            # print(f"Current set: {app.set_counter}, number of reps: {self.entered_reps.text}")
             self.entered_reps.text = ""
             app.set_counter += 1
             if app.set_counter == 4:
@@ -207,7 +213,7 @@ class ButtonsPage(BoxLayout):
                 app.overall_training[app.current_exercise] = app.current_exercise_dict
                 app.current_exercise_dict = {}
                 app.screen_manager.current = "Exercises"
-                print(app.overall_training)
+                # print(app.overall_training)
                 # print(len(app.overall_training))
 
             if len(app.overall_training) == 7:
