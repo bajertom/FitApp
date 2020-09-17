@@ -2,6 +2,7 @@ import csv
 import shutil
 import os
 import ast
+import datetime
 import kivy
 from kivy.app import App
 from kivy.uix.label import Label
@@ -10,6 +11,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.clock import Clock
+
 
 database_path = "C:\\Study\\Environments\\FitApp\\database.csv"
 database_copy_path = "C:\\Study\\Environments\\FitApp\\database_copy"
@@ -210,6 +213,8 @@ class ButtonsPage(BoxLayout):
             # print(f"Current set: {app.set_counter}, number of reps: {self.entered_reps.text}")
             self.entered_reps.text = ""
             app.set_counter += 1
+            app.start_time = datetime.datetime.now()
+            app.screen_manager.current = "Timer"
             if app.set_counter == 4:
                 app.set_counter = 1
                 app.overall_training[app.current_exercise] = app.current_exercise_dict
@@ -230,7 +235,31 @@ class ButtonsPage(BoxLayout):
             self.entered_reps.text += button_pressed
 
 
+class TimerPage(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        # main = BoxLayout()
+        self.timer_button = Button()
+        # main.add_widget(self.timer_button)
+        self.timer_button.bind(on_press=self.on_button_press)
+        self.add_widget(self.timer_button)
+        self.start_time = datetime.datetime.now()
+        Clock.schedule_interval(self.timer, 0.1)
+
+    
+    def timer(self, dt):
+        actual_time = datetime.datetime.now()
+        time_difference = actual_time - app.start_time
+        self.timer_button.text = str(time_difference)[2:7]
+
+
+    def on_button_press(self, instance):
+
+        app.screen_manager.current = "Buttons"
+
 class MainApp(App):
+    start_time = datetime.datetime.now()
     set_counter = 1
     current_exercise = ""
     todays_date = ""
@@ -275,6 +304,11 @@ class MainApp(App):
         self.weight_page = WeightPage()
         screen = Screen(name="Weight")
         screen.add_widget(self.weight_page)
+        self.screen_manager.add_widget(screen)
+
+        self.timer_page = TimerPage()
+        screen = Screen(name="Timer")
+        screen.add_widget(self.timer_page)
         self.screen_manager.add_widget(screen)
 
         return self.screen_manager
