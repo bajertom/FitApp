@@ -1,4 +1,5 @@
 import csv
+import shutil
 import os
 import ast
 import kivy
@@ -11,6 +12,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen
 
 database_path = "C:\\Study\\Environments\\FitApp\\database.csv"
+database_copy_path = "C:\\Study\\Environments\\FitApp\\database_copy"
 if not os.path.exists(database_path):
     with open(database_path, "w",newline="") as database:
         fieldnames = ["Date", "Chin-up", "Bench press", "Squat",
@@ -91,7 +93,7 @@ class DatePage(BoxLayout):
 class Exercises(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.cols = 3
+        self.cols = 2
 
         exercises = ["Chin-up", "Bench press", "Squat",
                      "Deadlift", "Row", "Farmer"]
@@ -222,6 +224,7 @@ class ButtonsPage(BoxLayout):
                                  "Deadlift", "Row", "Farmer"]
                     writer = csv.DictWriter(database,fieldnames=fieldnames)
                     writer.writerow(app.overall_training)
+                shutil.copy2(database_path, database_copy_path)
                 app.stop()
         else:
             self.entered_reps.text += button_pressed
