@@ -29,11 +29,11 @@ class StartExitPage(BoxLayout):
         super().__init__(**kwargs)
         self.orientation = "vertical"
         
-        self.start_button = Button(text="Start Training")
+        self.start_button = Button(text="Start Training",font_size=30)
         self.start_button.bind(on_press=self.start_training)
         self.add_widget(self.start_button)
 
-        self.quit_button = Button(text="Quit app")
+        self.quit_button = Button(text="Quit app",font_size=30)
         self.quit_button.bind(on_press=self.quit_app)
         self.add_widget(self.quit_button)
 
@@ -51,10 +51,10 @@ class DatePage(BoxLayout):
         super().__init__()
         self.orientation = "vertical"
 
-        self.date_label = Label(text="Insert today's date in DD.MM.YYYY format")
+        self.date_label = Label(text="Insert today's date in DD.MM.YYYY format",font_size=30)
         self.add_widget(self.date_label)
 
-        self.entered_date = TextInput(multiline=False,readonly=True)
+        self.entered_date = TextInput(multiline=False,readonly=True,font_size=70,halign="center")
         self.add_widget(self.entered_date)
 
         buttons = [["1", "2", "3", ""],
@@ -66,7 +66,7 @@ class DatePage(BoxLayout):
         for row in buttons:
             h_layout = BoxLayout()
             for number in row:
-                button = Button(text=number)
+                button = Button(text=number,font_size=30)
                 button.bind(on_press=self.on_button_press_date)
                 h_layout.add_widget(button)
             # main_layout.add_widget(h_layout)
@@ -107,7 +107,8 @@ class Exercises(GridLayout):
             previous_set_rep = ast.literal_eval(app.previous_training[exercise])[1]
             # print(slovnik)
             # print(type(slovnik))
-            exercise_button = Button(text=f"{exercise}\n\nWeight: {previous_set_rep[0]}\nReps: {previous_set_rep[1]}")
+            exercise_button = Button(text=f"{exercise}\n\nWeight: {previous_set_rep[0]}\nReps: {previous_set_rep[1]}",
+                                     font_size=30, halign="center")
             self.add_widget(exercise_button)
             exercise_button.bind(on_press=self.on_exercise_press)
 
@@ -134,10 +135,10 @@ class WeightPage(BoxLayout):
         self.orientation = "vertical"
 
 
-        self.weight_label = Label(text="Insert weight")
+        self.weight_label = Label(text="Insert weight",font_size=30)
         self.add_widget(self.weight_label)
 
-        self.entered_weight = TextInput(multiline=False,readonly=True)
+        self.entered_weight = TextInput(multiline=False,readonly=True,font_size=70,halign="center")
         self.add_widget(self.entered_weight)
 
         buttons = [["1", "2", "3", "Exercises"],
@@ -148,7 +149,7 @@ class WeightPage(BoxLayout):
         for row in buttons:
             h_layout = BoxLayout()
             for number in row:
-                button = Button(text=number)
+                button = Button(text=number,font_size=30)
                 button.bind(on_press=self.on_button_press_weight)
                 h_layout.add_widget(button)
             # main_layout.add_widget(h_layout)
@@ -178,10 +179,10 @@ class ButtonsPage(BoxLayout):
         super().__init__(**kwargs)
         self.orientation = "vertical"
 
-        self.last_training_displayed = Label(font_size=30)
+        self.last_training_displayed = Label(font_size=30,halign="center")
         self.add_widget(self.last_training_displayed)
 
-        self.entered_reps = TextInput(multiline=False,readonly=True)
+        self.entered_reps = TextInput(multiline=False,readonly=True,font_size=70,halign="center")
         self.add_widget(self.entered_reps)
 
         buttons = [["1", "2", "3", "Weight"],
@@ -192,7 +193,7 @@ class ButtonsPage(BoxLayout):
         for row in buttons:
             h_layout = BoxLayout()
             for number in row:
-                button = Button(text=number)
+                button = Button(text=number,font_size=30)
                 button.bind(on_press=self.on_button_press)
                 h_layout.add_widget(button)
             self.add_widget(h_layout)
