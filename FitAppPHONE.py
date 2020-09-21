@@ -226,7 +226,7 @@ class ButtonsPage(BoxLayout):
                     # print(exercise_object.text.split("\n")[0])
                     if exercise_object.text.split("\n")[0] == app.current_exercise:
                         exercise_object.background_normal=""
-                        exercise_object.background_color="#4fbc33"
+                        exercise_object.background_color=(0.31, 0.74, 0.2, 1)
                 app.set_counter = 1
                 app.overall_training[app.current_exercise] = app.current_exercise_dict
                 app.current_exercise_dict = {}
@@ -304,7 +304,7 @@ class MainApp(App):
         
         self.exercises_page = ExercisesPage()
         screen = Screen(name='Exercises')
-        screen.add_widget(self.exercises)
+        screen.add_widget(self.exercises_page)
         self.screen_manager.add_widget(screen)
         
         self.buttons_page = ButtonsPage()

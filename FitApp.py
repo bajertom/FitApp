@@ -96,7 +96,7 @@ class DatePage(BoxLayout):
         else:
             self.entered_date.text += button_pressed
 
-class Exercises(GridLayout):
+class ExercisesPage(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.cols = 2
@@ -219,11 +219,11 @@ class ButtonsPage(BoxLayout):
             app.start_time = datetime.datetime.now()
             app.screen_manager.current = "Timer"
             if app.set_counter == 4:
-                for exercise_object in app.exercises.children:
+                for exercise_object in app.exercises_page.children:
                     # print(exercise_object.text.split("\n")[0])
                     if exercise_object.text.split("\n")[0] == app.current_exercise:
                         exercise_object.background_normal=""
-                        exercise_object.background_color="#4fbc33"
+                        exercise_object.background_color=(0.31, 0.74, 0.2, 1)
                 app.set_counter = 1
                 app.overall_training[app.current_exercise] = app.current_exercise_dict
                 app.current_exercise_dict = {}
@@ -299,9 +299,9 @@ class MainApp(App):
         screen.add_widget(self.date_page)
         self.screen_manager.add_widget(screen)
         
-        self.exercises = Exercises()
+        self.exercises_page = ExercisesPage()
         screen = Screen(name='Exercises')
-        screen.add_widget(self.exercises)
+        screen.add_widget(self.exercises_page)
         self.screen_manager.add_widget(screen)
         
         self.buttons_page = ButtonsPage()
