@@ -107,10 +107,10 @@ class Exercises(GridLayout):
             previous_set_rep = ast.literal_eval(app.previous_training[exercise])[1]
             # print(slovnik)
             # print(type(slovnik))
-            exercise_button = Button(text=f"{exercise}\n\nWeight: {previous_set_rep[0]}\nReps: {previous_set_rep[1]}",
+            self.exercise_button = Button(text=f"{exercise}\n\nWeight: {previous_set_rep[0]}\nReps: {previous_set_rep[1]}",
                                      font_size=30, halign="center")
-            self.add_widget(exercise_button)
-            exercise_button.bind(on_press=self.on_exercise_press)
+            self.add_widget(self.exercise_button)
+            self.exercise_button.bind(on_press=self.on_exercise_press)
 
 
     def on_exercise_press(self, instance):
@@ -124,7 +124,7 @@ class Exercises(GridLayout):
         # print(dicted_previous_training_stringed)
         app.buttons_page.last_training_displayed.text = f"Last training weights and reps:\n{dicted_previous_training_stringed}"
         # print(type(app.buttons_page.last_training_displayed.text))
-        
+
         app.screen_manager.current = "Weight"
 
 
@@ -219,6 +219,11 @@ class ButtonsPage(BoxLayout):
             app.start_time = datetime.datetime.now()
             app.screen_manager.current = "Timer"
             if app.set_counter == 4:
+                for exercise_object in app.exercises.children:
+                    # print(exercise_object.text.split("\n")[0])
+                    if exercise_object.text.split("\n")[0] == app.current_exercise:
+                        exercise_object.background_normal=""
+                        exercise_object.background_color="#4fbc33"
                 app.set_counter = 1
                 app.overall_training[app.current_exercise] = app.current_exercise_dict
                 app.current_exercise_dict = {}
