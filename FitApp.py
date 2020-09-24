@@ -235,8 +235,8 @@ class DifferencePage(BoxLayout):
         super().__init__(**kwargs)
 
         self.description = (
-            f"Difference of reps from previous training\n"
-            f"('-' for uncomparable weight)\nPress for save&exit\n"
+            f"Difference of reps\n from previous training\n"
+            f"('-' if diff. weight)\nPress for save&exit\n\n\n\n"
             )
         self.difference = ""
 

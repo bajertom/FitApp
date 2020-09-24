@@ -239,8 +239,8 @@ class DifferencePage(BoxLayout):
         super().__init__(**kwargs)
 
         self.description = (
-            f"Difference of reps from previous training\n"
-            f"('-' for uncomparable weight)\nPress for save&exit\n"
+            f"Difference of reps\n from previous training\n"
+            f"('-' if diff. weight)\nPress for save&exit\n\n\n\n"
             )
         self.difference = ""
 
@@ -267,7 +267,7 @@ class DifferencePage(BoxLayout):
                         self.difference += f"{exercise_diff}\n"
 
         self.difference_button = Button(text=f"{self.description}\n{self.difference}",
-                                        font_size=30, halign="center", font_name="CourierPrime-Regular")
+                                        font_size=45, halign="center", font_name="CourierPrime-Regular")
         self.difference_button.bind(on_press=self.save_quit)
         self.add_widget(self.difference_button)
 
