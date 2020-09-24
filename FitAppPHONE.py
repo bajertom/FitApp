@@ -128,7 +128,7 @@ class WeightPage(BoxLayout):
         self.weight_label = Label(text="Insert weight", font_size=60)
         self.add_widget(self.weight_label)
 
-        self.entered_weight = TextInput(multiline=False, readonly=True font_size=140, halign="center")
+        self.entered_weight = TextInput(multiline=False, readonly=True, font_size=140, halign="center")
         self.add_widget(self.entered_weight)
 
         buttons = [["1", "2", "3", "Exercises"],
