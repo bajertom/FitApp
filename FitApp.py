@@ -16,12 +16,20 @@ from kivy.clock import Clock
 
 database_path = "C:\\Study\\Environments\\FitApp\\database.csv"
 database_copy_path = "C:\\Study\\Environments\\FitApp\\database_copy"
+default_database = {'Date': '00.00.0000',
+                    'Chin-up': {1: (0.0, 0), 2: (0.0, 0), 3: (0.0, 0)},
+                    'Bench press': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
+                    'Squat': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
+                    'Deadlift': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
+                    'Row': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
+                    'Farmer': {1: (0, 0), 2: (0, 0), 3: (0, 0)}}
 if not os.path.exists(database_path):
     with open(database_path, "w", newline="") as database:
         fieldnames = ["Date", "Chin-up", "Bench press", "Squat",
                       "Deadlift", "Row", "Farmer"]
         writer = csv.DictWriter(database, fieldnames=fieldnames)
         writer.writeheader()
+        writer.writerow(default_database)
 
 
 class StartExitPage(BoxLayout):
@@ -105,6 +113,7 @@ class ExercisesPage(GridLayout):
             self.exercise_button.bind(on_press=self.on_exercise_press)
 
     def on_exercise_press(self, instance):
+        # Shows the weight and reps for selected exercise from previous training in ButtonsPage 
         app.current_exercise = instance.text.split("\n")[0]
         dicted_previous_training = ast.literal_eval(app.previous_training[instance.text.split("\n")[0]])
         dicted_previous_training_stringed = (
@@ -190,11 +199,21 @@ class ButtonsPage(BoxLayout):
         elif button_pressed == "Weight":
             app.screen_manager.current = "Weight"
         elif button_pressed == "Enter":
-            app.current_exercise_dict[app.set_counter] = (float(app.weight), int(self.entered_reps.text))
+            # Checks for nonsense values
+            try:
+                converted_weight = float(app.weight)
+            except ValueError:
+                converted_weight = 0
+            try:
+                converted_reps = int(self.entered_reps.text)
+            except ValueError:
+                converted_reps = 0
+            app.current_exercise_dict[app.set_counter] = (converted_weight, converted_reps)
             self.entered_reps.text = ""
             app.set_counter += 1
             app.start_time = datetime.datetime.now()
             app.screen_manager.current = "Timer"
+            # Turns the exercise tile to green colour after finishing it
             if app.set_counter == 4:
                 for exercise_object in app.exercises_page.children:
                     if exercise_object.text.split("\n")[0] == app.current_exercise:
@@ -204,6 +223,7 @@ class ButtonsPage(BoxLayout):
                 app.overall_training[app.current_exercise] = app.current_exercise_dict
                 app.current_exercise_dict = {}
                 app.screen_manager.current = "Exercises"
+            #  Calculates the difference between this and previous workout, once completed
             if len(app.overall_training) == 7:
                 app.difference_page.diff_calculation(app.previous_training, app.overall_training)
                 app.screen_manager.current = "Difference"
@@ -218,7 +238,7 @@ class TimerPage(BoxLayout):
         self.timer_button = Button(font_size=120)
         self.timer_button.bind(on_press=self.on_button_press)
         self.add_widget(self.timer_button)
-        self.start_time = datetime.datetime.now()
+        # self.start_time = datetime.datetime.now()
         Clock.schedule_interval(self.timer, 0.1)
     
     def timer(self, dt):
@@ -240,9 +260,10 @@ class DifferencePage(BoxLayout):
             )
         self.difference = ""
 
-    def diff_calculation(self, stary, novy):
-        for exercise_prev_training, data_prev_training in stary.items():
-            for exercise_curr_training, data_curr_training in novy.items():
+    def diff_calculation(self, previous_training, finished_training):
+        # Called from ButtonsPage's on_button_press method
+        for exercise_prev_training, data_prev_training in previous_training.items():
+            for exercise_curr_training, data_curr_training in finished_training.items():
                 if exercise_curr_training == exercise_prev_training:
                     if exercise_curr_training == "Date":
                         pass
