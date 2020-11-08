@@ -13,7 +13,7 @@ package.domain = tomas.bajer
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,csv
+source.include_exts = py,png,jpg,kv,atlas,csv,ttf
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = assets/*,images/*.png
@@ -28,7 +28,7 @@ source.include_exts = py,png,jpg,kv,atlas,csv
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.1.5
+version = 0.2.6
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
