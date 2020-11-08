@@ -3,7 +3,7 @@ Hello,
 FitApp is a little project made by me for personal use. The reasons behind this project were multiple:
 - to deepen my understanding of Python
 - to get my hands on some kind of GUI 
-- to learn basics of Git/GitHUb
+- to learn basics of Git/GitHub
 - to get familiar with Linux
 - to get familiar with the process of deploying a mobile app
 - and to have fun doing it :-)
