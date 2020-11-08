@@ -33,8 +33,8 @@ if not os.path.exists(database_path):
 
 
 class StartExitPage(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self):
+        super().__init__()
         self.orientation = "vertical"
         
         self.start_button = Button(text="Start Training", font_size=30)
@@ -99,8 +99,8 @@ class DatePage(BoxLayout):
 
 
 class ExercisesPage(GridLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self):
+        super().__init__()
         self.cols = 2
         self.spacing = 1
         exercises = ["Chin-up", "Bench press", "Squat",
@@ -164,8 +164,8 @@ class WeightPage(BoxLayout):
 
 
 class ButtonsPage(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self):
+        super().__init__()
         self.orientation = "vertical"
 
         self.last_training_displayed = Label(font_size=30, halign="center")
@@ -232,13 +232,12 @@ class ButtonsPage(BoxLayout):
 
 
 class TimerPage(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self):
+        super().__init__()
 
         self.timer_button = Button(font_size=120)
         self.timer_button.bind(on_press=self.on_button_press)
         self.add_widget(self.timer_button)
-        # self.start_time = datetime.datetime.now()
         Clock.schedule_interval(self.timer, 0.1)
     
     def timer(self, dt):
@@ -251,8 +250,8 @@ class TimerPage(BoxLayout):
 
 
 class DifferencePage(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self):
+        super().__init__()
 
         self.description = (
             f"Difference of reps\n from previous training\n"
