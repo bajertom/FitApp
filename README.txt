@@ -23,3 +23,5 @@ Download everything from this repository to one folder. For desktop use simply r
 Open terminal in your FitApp folder and run "buildozer android deploy debug run". The app will be deployed to your phone and it will start right away.
 
 Your phone must be in "developer mode" and have "USB debugging" allowed.
+
+Developed by Tomáš Bajer

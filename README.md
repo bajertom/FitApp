@@ -24,5 +24,5 @@ Open terminal in your FitApp folder and run "buildozer android deploy debug run"
 
 Your phone must be in "developer mode" and have "USB debugging" allowed.
 
-
+Developed by Tomáš Bajer
 
