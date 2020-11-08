@@ -79,17 +79,12 @@ class DatePage(BoxLayout):
     def on_button_press_date(self, instance):
         button_pressed = instance.text
         if button_pressed == "Enter":
-            app.todays_date = self.entered_date.text
-            app.overall_training["Date"] = app.todays_date
-            app.screen_manager.current = "Exercises"
-            # if len(self.entered_date.text) != 10:
-            #     pass
-            # else:
-            #     app.todays_date = self.entered_date.text
-            #     app.overall_training["Date"] = app.todays_date
-            #     print(app.overall_training)
-            #     print(app.previous_training)
-            #     app.screen_manager.current = "Exercises"
+            if len(self.entered_date.text) != 10:
+                pass
+            else:
+                app.todays_date = self.entered_date.text
+                app.overall_training["Date"] = app.todays_date
+                app.screen_manager.current = "Exercises"
         elif button_pressed == "C":
             self.entered_date.text = ""
         elif button_pressed == "Back":
