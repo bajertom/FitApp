@@ -17,7 +17,7 @@ from kivy.clock import Clock
 database_path = "C:\\Study\\Environments\\FitApp\\database.csv"
 database_copy_path = "C:\\Study\\Environments\\FitApp\\database_copy"
 default_database = {'Date': '00.00.0000',
-                    'Chin-up': {1: (0.0, 0), 2: (0.0, 0), 3: (0.0, 0)},
+                    'Overhead press': {1: (0.0, 0), 2: (0.0, 0), 3: (0.0, 0)},
                     'Bench press': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
                     'Squat': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
                     'Deadlift': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
@@ -25,7 +25,7 @@ default_database = {'Date': '00.00.0000',
                     'Farmer': {1: (0, 0), 2: (0, 0), 3: (0, 0)}}
 if not os.path.exists(database_path):
     with open(database_path, "w", newline="") as database:
-        fieldnames = ["Date", "Chin-up", "Bench press", "Squat",
+        fieldnames = ["Date", "Overhead press", "Bench press", "Squat",
                       "Deadlift", "Row", "Farmer"]
         writer = csv.DictWriter(database, fieldnames=fieldnames)
         writer.writeheader()
@@ -98,7 +98,7 @@ class ExercisesPage(GridLayout):
         super().__init__()
         self.cols = 2
         self.spacing = 1
-        exercises = ["Chin-up", "Bench press", "Squat",
+        exercises = ["Overhead press", "Bench press", "Squat",
                      "Deadlift", "Row", "Farmer"]
         for exercise in exercises:
             previous_set_rep = ast.literal_eval(app.previous_training[exercise])[1]
@@ -262,7 +262,7 @@ class DifferencePage(BoxLayout):
                     if exercise_curr_training == "Date":
                         pass
                     else:
-                        exercise_diff = f"{exercise_curr_training+':':<13}"
+                        exercise_diff = f"{exercise_curr_training+':':<15}"
                         data_prev_training = ast.literal_eval(data_prev_training)
                         for set_nr in data_prev_training.keys():
                             if data_prev_training[set_nr][0] == data_curr_training[set_nr][0]:
@@ -284,7 +284,7 @@ class DifferencePage(BoxLayout):
 
     def save_quit(self, instance):
         with open(database_path, "a", newline="") as database:
-            fieldnames = ["Date", "Chin-up", "Bench press", "Squat",
+            fieldnames = ["Date", "Overhead press", "Bench press", "Squat",
                           "Deadlift", "Row", "Farmer"]
             writer = csv.DictWriter(database, fieldnames=fieldnames)
             writer.writerow(app.overall_training)
