@@ -18,3 +18,8 @@ After clicking on an exercise tile, user adds the weight lifted and then number 
 
 During the training, weights or exercises can be changed at any time. After the whole workout is done, the app calculates the difference between finished training and the previous one. If the weight for an exercise differs from previous training, comparison cannot be done, otherwise difference in number of reps (either + or - or 0) for every exercise and every set is shown. Then all the data gathered in current training is saved and appended to a database.csv file.
 
+How to install:
+Download everything from this repository to one folder. For desktop use simply run "python3 FitApp.py" from CMD or Terminal. To deploy the app on Android phone, rename FitAppPHONE.py to main.py. Buildozer.spec file must be in the same folder as main.py. Install CourierPrime-Regular.ttf by running/doubleclicking it.
+Open terminal in your FitApp folder and run "buildozer android deploy debug run". The app will be deployed to your phone and it will start right away.
+
+Your phone must be in "developer mode" and have "USB debugging" allowed.
