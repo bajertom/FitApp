@@ -264,7 +264,7 @@ class DifferencePage(BoxLayout):
                     if exercise_curr_training == "Date":
                         pass
                     else:
-                        exercise_diff = f"{exercise_curr_training+':':<13}"
+                        exercise_diff = f"{exercise_curr_training+':':<15}"
                         data_prev_training = ast.literal_eval(data_prev_training)
                         for set_nr in data_prev_training.keys():
                             if data_prev_training[set_nr][0] == data_curr_training[set_nr][0]:
@@ -290,6 +290,7 @@ class DifferencePage(BoxLayout):
                           "Deadlift", "Row", "Farmer"]
             writer = csv.DictWriter(database, fieldnames=fieldnames)
             writer.writerow(app.overall_training)
+        # Creates a backup for the database
         shutil.copy2(database_path, database_copy_path)
         app.stop()
 

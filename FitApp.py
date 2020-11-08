@@ -288,6 +288,7 @@ class DifferencePage(BoxLayout):
                           "Deadlift", "Row", "Farmer"]
             writer = csv.DictWriter(database, fieldnames=fieldnames)
             writer.writerow(app.overall_training)
+        # Creates a backup for the database
         shutil.copy2(database_path, database_copy_path)
         app.stop()
 
