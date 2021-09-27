@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+import databases
 import csv
 import shutil
 import os
@@ -13,23 +15,152 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.clock import Clock
 
+exercises = {"BS": "Back squat",
+             "RDL": "Romanian Deadlift",
+             "BHT": "Barbell Hip Thrust",
+             "LE": "Leg Extension",
+             "LLC": "Lying Leg Curl",
+             "MSHA": "Machine Seated Hip Abduction",
+             "C": "Crunch",
+             "BBP": "Barbell Bench Press",
+             "LP": "Lat Pulldown",
+             "MP": "Military Press",
+             "CSTR": "Chest Supported T-Bar Row",
+             "CF": "Cable Flye",
+             "DSC": "Dumbbell Supinated Curl",
+             "SARTE": "Single Arm Rope Triceps Extension",
+             "DL": "Deadlift",
+             "DWL": "Dumbbell Walking Lunge",
+             "SLLE": "Single Leg Leg Extension",
+             "SLLLC": "Single Leg Lying Lec Curl",
+             "SCR": "Standing Calf Raise",
+             "P": "Plank",
+             "DIP": "Dumbbell Incline Press",
+             "RGLP": "Reverse Grip Lat Pulldown",
+             "AD": "Assisted Dip",
+             "BBOR": "Barbell Bent Over Row",
+             "DLR": "Dumbbell Lateral Raise",
+             "SFP": "Seated Face Pull",
+             "HC": "Hammer Curl",
+             "GS": "Goblet Squat",
+             "DSLHT": "Dumbbell Single Leg Hip Thrust",
+             "LPR": "Leg Press",
+             "BC": "Bicycle Crunch",
+             "SAP": "Single Arm Pulldown",
+             "DSSP": "Dumbbell Seated Shoulder Press",
+             "DR": "Dumbbell Row",
+             "EZBC": "EZ Bar Curl",
+             "SLC": "Seated Leg Curl",
+             "HLR": "Hanging Leg Raise",
+             "NGP": "Neutral Grip Pulldown",
+             "CSR": "Cable Seated Row",
+             "CLR": "Cable Lateral Raise",
+             "RPD": "Reverse Peck Deck",
+             "SACC": "Single Arm Cable Curl"}
 
-database_path = "C:\\Study\\Environments\\FitApp\\database.csv"
-database_copy_path = "C:\\Study\\Environments\\FitApp\\database_copy"
-default_database = {'Date': '00.00.0000',
-                    'Overhead press': {1: (0.0, 0), 2: (0.0, 0), 3: (0.0, 0)},
-                    'Bench press': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
-                    'Squat': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
-                    'Deadlift': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
-                    'Row': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
-                    'Farmer': {1: (0, 0), 2: (0, 0), 3: (0, 0)}}
+Lower1A = [exercises["BS"], exercises["RDL"], exercises["BHT"], exercises["LE"], exercises["LLC"], exercises["MSHA"],
+          exercises["C"]]
+Upper1A = [exercises["BBP"], exercises["LP"], exercises["MP"], exercises["CSTR"], exercises["CF"], exercises["DSC"],
+          exercises["SARTE"]]
+Lower1B = [exercises["DL"], exercises["DWL"], exercises["SLLE"], exercises["SLLLC"], exercises["MSHA"],
+           exercises["SCR"], exercises["P"]]
+Upper1B = [exercises["DIP"], exercises["RGLP"], exercises["AD"], exercises["BBOR"], exercises["DLR"], exercises["SFP"],
+          exercises["HC"]]
+Lower2A = [exercises["DL"], exercises["GS"], exercises["DSLHT"], exercises["LPR"], exercises["LLC"], exercises["SCR"],
+          exercises["BC"]]
+Upper2A = [exercises["BBP"], exercises["SAP"], exercises["DSSP"], exercises["DR"], exercises["AD"], exercises["SFP"],
+          exercises["EZBC"]]
+Lower2B = [exercises["BS"], exercises["BHT"], exercises["RDL"], exercises["SLC"], exercises["SCR"], exercises["HLR"],
+          exercises["MSHA"]]
+Upper2B = [exercises["MP"], exercises["NGP"], exercises["DIP"], exercises["CSR"], exercises["CLR"], exercises["RPD"],
+          exercises["SACC"]]
+
+all_trainings = {"Lower1A": Lower1A,
+                 "Upper1A": Upper1A,
+                 "Lower1B": Lower1B,
+                 "Upper1B": Upper1B,
+                 "Lower2A": Lower2A,
+                 "Upper2A": Upper2A,
+                 "Lower2B": Lower2B,
+                 "Upper2B": Upper2B}
+
+
+database_path = "/home/tomasbajer/PycharmProjects/FitApp/database.csv"
+database_copy_path = "/home/tomasbajer/PycharmProjects/FitApp/database_copy.csv"
+default_values = {1: (0.0, 0), 2: (0.0, 0), 3: (0.0, 0)}
+default_database = {'Date': '00.00.0000'}
+
+for exercise in exercises.values():
+    default_database[exercise] = default_values
+
 if not os.path.exists(database_path):
     with open(database_path, "w", newline="") as database:
-        fieldnames = ["Date", "Overhead press", "Bench press", "Squat",
-                      "Deadlift", "Row", "Farmer"]
+        fieldnames = [x for x in exercises.values()]
+        fieldnames.append("Date")
         writer = csv.DictWriter(database, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerow(default_database)
+
+
+# EXERCISES = {"BS": "Back squat",
+#              "RDL": "Romanian Deadlift",
+#              "BHP": "Barbell Hip Thrust",
+#              "LE": "Leg Extension",
+#              "LLC": "Lying Leg Curl",
+#              "MSHA": "Machine Seated Hip Abduction",
+#              "CR": "Crunch",
+#              "BBP": "Barbell Bench Press",
+#              "LP": "Lat Pulldown",
+#              "MP": "Military Press",
+#              "CSTR": "Chest Supported T-Bar Row",
+#              "CF": "Cable Flye",
+#              "DSC": "Dumbbell Supinated Curl",
+#              "SARTE": "Single Arm Rope Triceps Extension",
+#              "DL": "Deadlift",
+#              "DWL": "Dumbbell Walking Lunge",
+#              "SSLE": "Single Leg Leg Extension",
+#              "SLLLC": "Single Leg Lying Lec Curl",
+#              "SCR": "Standing Calf Raise",
+#              "P": "Plank",
+#              "DIP": "Dumbbell Incline Press",
+#              "RGLP": "Reverse Grip Lat Pulldown",
+#              "AD": "Assisted Dip",
+#              "BBOR": "Barbell Bent Over Row",
+#              "DLR": "Dumbbell Lateral Raise",
+#              "SFP": "Seated Face Pull",
+#              "HC": "Hammer Curl",
+#              "GS": "Goblet Squat",
+#              "DSLHT": "Dumbbell Single Leg Hip Thrust",
+#              "LPR": "Leg Press",
+#              "BC": "Bicycle Crunch",
+#              "SAP": "Single Arm Pulldown",
+#              "DSSP": "Dumbbell Seated Shoulder Press",
+#              "DR": "Dumbbell Row",
+#              "EZBC": "EZ Bar Curl",
+#              "SLC": "Seated Leg Curl",
+#              "HLR": "Hanging Leg Raise",
+#              "NGP": "Neutral Grip Pulldown",
+#              "CSR": "Cable Seated Row",
+#              "CLR": "Cable Lateral Raise",
+#              "RPD": "Reverse Peck Deck",
+#              "SACC": "Single Arm Cable Curl"}
+#
+# database_path = "/home/tomasbajer/PycharmProjects/FitApp/database.csv"
+# database_copy_path = "/home/tomasbajer/PycharmProjects/FitApp/database_copy.csv/"
+# default_database = {'Date': '00.00.0000',
+#                     'Overhead press': {1: (0.0, 0), 2: (0.0, 0), 3: (0.0, 0)},
+#                     'Bench press': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
+#                     'Squat': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
+#                     'Deadlift': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
+#                     'Row': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
+#                     'Farmer': {1: (0, 0), 2: (0, 0), 3: (0, 0)}}
+# if not os.path.exists(database_path):
+#     with open(database_path, "w", newline="") as database:
+#         fieldnames = ["Date", "Overhead press", "Bench press", "Squat",
+#                       "Deadlift", "Row", "Farmer"]
+#         writer = csv.DictWriter(database, fieldnames=fieldnames)
+#         writer.writeheader()
+#         writer.writerow(default_database)
 
 
 class StartExitPage(BoxLayout):
@@ -79,12 +210,12 @@ class DatePage(BoxLayout):
     def on_button_press_date(self, instance):
         button_pressed = instance.text
         if button_pressed == "Enter":
-            if len(self.entered_date.text) != 10:
+            if len(self.entered_date.text) != 1:
                 pass
             else:
                 app.todays_date = self.entered_date.text
                 app.overall_training["Date"] = app.todays_date
-                app.screen_manager.current = "Exercises"
+                app.screen_manager.current = "Trainings"
         elif button_pressed == "C":
             self.entered_date.text = ""
         elif button_pressed == "Back":
@@ -93,22 +224,63 @@ class DatePage(BoxLayout):
             self.entered_date.text += button_pressed
 
 
+class TrainingsPage(BoxLayout):
+    def __init__(self):
+        super().__init__()
+        self.orientation = "vertical"
+
+        self.weight_label = Label(text="Choose training", font_size=30)
+        self.add_widget(self.weight_label)
+
+        name_of__trainings = [["Lower1A", "Upper1A"],
+                             ["Lower1B", "Upper1B"],
+                             ["Lower2A", "Upper2A"],
+                             ["Lower2B", "Upper2B"]]
+        for row in name_of__trainings:
+            h_layout = BoxLayout()
+            for training in row:
+                button = Button(text=training, font_size=30)
+                button.bind(on_press=self.on_button_press_exercises)
+                h_layout.add_widget(button)
+            self.add_widget(h_layout)
+
+    def on_button_press_exercises(self, instance):
+        chosen_training = instance.text
+        # print(chosen_training)
+        for training in all_trainings.keys():
+            if chosen_training == training:
+                app.current_training = all_trainings[training]
+        # print(app.current_training)
+        app.exercises_page = ExercisesPage()
+        screen = Screen(name='Exercises')
+        screen.add_widget(app.exercises_page)
+        app.screen_manager.add_widget(screen)
+        # print(app.current_training)
+        app.screen_manager.current = "Exercises"
+
+
+
 class ExercisesPage(GridLayout):
     def __init__(self):
         super().__init__()
         self.cols = 2
         self.spacing = 1
-        exercises = ["Overhead press", "Bench press", "Squat",
-                     "Deadlift", "Row", "Farmer"]
+        exercises = app.current_training
+        # print(app.current_training)
         for exercise in exercises:
+            print(exercise)
             previous_set_rep = ast.literal_eval(app.previous_training[exercise])[1]
-            self.exercise_button = Button(text=f"{exercise}\n\nWeight: {previous_set_rep[0]}\nReps: {previous_set_rep[1]}",
-                                          font_size=30, halign="center")
+            # self.exercise_button = Button(text=f"{exercise}")
+            self.exercise_button = Button(
+                text=f"{exercise}\n\nWeight: {previous_set_rep[0]}\nReps: {previous_set_rep[1]}",
+                font_size=30, halign="center")
             self.add_widget(self.exercise_button)
             self.exercise_button.bind(on_press=self.on_exercise_press)
+        self.back_button = Button(text="Back")
+        self.add_widget(self.back_button)
 
     def on_exercise_press(self, instance):
-        # Shows the weight and reps for selected exercise from previous training in ButtonsPage 
+        # Shows the weight and reps for selected exercise from previous training in ButtonsPage
         app.current_exercise = instance.text.split("\n")[0]
         dicted_previous_training = ast.literal_eval(app.previous_training[instance.text.split("\n")[0]])
         dicted_previous_training_stringed = (
@@ -216,11 +388,15 @@ class ButtonsPage(BoxLayout):
                         exercise_object.background_color = (0.31, 0.74, 0.2, 1)
                 app.set_counter = 1
                 app.overall_training[app.current_exercise] = app.current_exercise_dict
+                print(app.overall_training)
+                print(app.current_training)
+                app.exercise_counter += 1
+                print(app.exercise_counter)
                 app.current_exercise_dict = {}
                 app.screen_manager.current = "Exercises"
             #  Calculates the difference between this and previous workout, once completed
-            if len(app.overall_training) == 7:
-                app.difference_page.diff_calculation(app.previous_training, app.overall_training)
+            if app.exercise_counter == 8:
+                # app.difference_page.diff_calculation(app.previous_training, app.overall_training)
                 app.screen_manager.current = "Difference"
         else:
             self.entered_reps.text += button_pressed
@@ -254,38 +430,41 @@ class DifferencePage(BoxLayout):
             )
         self.difference = ""
 
-    def diff_calculation(self, previous_training, finished_training):
-        # Called from ButtonsPage's on_button_press method
-        for exercise_prev_training, data_prev_training in previous_training.items():
-            for exercise_curr_training, data_curr_training in finished_training.items():
-                if exercise_curr_training == exercise_prev_training:
-                    if exercise_curr_training == "Date":
-                        pass
-                    else:
-                        exercise_diff = f"{exercise_curr_training+':':<15}"
-                        data_prev_training = ast.literal_eval(data_prev_training)
-                        for set_nr in data_prev_training.keys():
-                            if data_prev_training[set_nr][0] == data_curr_training[set_nr][0]:
-                                diff = data_curr_training[set_nr][1] - data_prev_training[set_nr][1]
-                                if diff == 0:
-                                    exercise_diff += f"{0:>2} "
-                                elif diff > 0:
-                                    exercise_diff += f"+{diff} "
-                                else:
-                                    exercise_diff += f"{diff} "
-                            else:
-                                exercise_diff += f" - "
-                        self.difference += f"{exercise_diff}\n"
+    # def diff_calculation(self, previous_training, finished_training):
+    #     # Called from ButtonsPage's on_button_press method
+    #     for exercise_prev_training, data_prev_training in previous_training.items():
+    #         for exercise_curr_training, data_curr_training in finished_training.items():
+    #             if exercise_curr_training == exercise_prev_training:
+    #                 if exercise_curr_training == "Date":
+    #                     pass
+    #                 else:
+    #                     exercise_diff = f"{exercise_curr_training+':':<15}"
+    #                     data_prev_training = ast.literal_eval(data_prev_training)
+    #                     for set_nr in data_prev_training.keys():
+    #                         if data_prev_training[set_nr][0] == data_curr_training[set_nr][0]:
+    #                             diff = data_curr_training[set_nr][1] - data_prev_training[set_nr][1]
+    #                             if diff == 0:
+    #                                 exercise_diff += f"{0:>2} "
+    #                             elif diff > 0:
+    #                                 exercise_diff += f"+{diff} "
+    #                             else:
+    #                                 exercise_diff += f"{diff} "
+    #                         else:
+    #                             exercise_diff += f" - "
+    #                     self.difference += f"{exercise_diff}\n"
 
-        self.difference_button = Button(text=f"{self.description}\n{self.difference}",
-                                        font_size=30, halign="center", font_name="CourierPrime-Regular")
+        # self.difference_button = Button(text=f"{self.description}\n{self.difference}",
+        #                                 font_size=30, halign="center", font_name="CourierPrime-Regular")
+        self.difference_button = Button(text=self.description)
         self.difference_button.bind(on_press=self.save_quit)
         self.add_widget(self.difference_button)
 
     def save_quit(self, instance):
         with open(database_path, "a", newline="") as database:
-            fieldnames = ["Date", "Overhead press", "Bench press", "Squat",
-                          "Deadlift", "Row", "Farmer"]
+            # fieldnames = ["Date", "Overhead press", "Bench press", "Squat",
+            #               "Deadlift", "Row", "Farmer"]
+            fieldnames = [x for x in exercises.values()]
+            fieldnames.append("Date")
             writer = csv.DictWriter(database, fieldnames=fieldnames)
             writer.writerow(app.overall_training)
         # Creates a backup for the database
@@ -296,18 +475,24 @@ class DifferencePage(BoxLayout):
 class MainApp(App):
     start_time = datetime.datetime.now()
     set_counter = 1
+    exercise_counter = 1
     current_exercise = ""
     todays_date = ""
     weight = ""
+    current_training = ""
     overall_training = {}
     current_exercise_dict = {}
     previous_training = {}
+
 
     def build(self):
         with open(database_path, "r", newline="") as database:
             reader = csv.DictReader(database)
             for row in reader:
                 self.previous_training = row
+            print(self.previous_training)
+            self.overall_training = self.previous_training
+            print(self.overall_training)
 
         self.screen_manager = ScreenManager()
 
@@ -320,12 +505,12 @@ class MainApp(App):
         screen = Screen(name="Date")
         screen.add_widget(self.date_page)
         self.screen_manager.add_widget(screen)
-        
-        self.exercises_page = ExercisesPage()
-        screen = Screen(name='Exercises')
-        screen.add_widget(self.exercises_page)
-        self.screen_manager.add_widget(screen)
-        
+
+        # self.exercises_page = ExercisesPage()
+        # screen = Screen(name='Exercises')
+        # screen.add_widget(self.exercises_page)
+        # self.screen_manager.add_widget(screen)
+
         self.buttons_page = ButtonsPage()
         screen = Screen(name="Buttons")
         screen.add_widget(self.buttons_page)
@@ -344,6 +529,11 @@ class MainApp(App):
         self.difference_page = DifferencePage()
         screen = Screen(name="Difference")
         screen.add_widget(self.difference_page)
+        self.screen_manager.add_widget(screen)
+
+        self.trainings_page = TrainingsPage()
+        screen = Screen(name="Trainings")
+        screen.add_widget(self.trainings_page)
         self.screen_manager.add_widget(screen)
 
         return self.screen_manager
