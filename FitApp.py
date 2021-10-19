@@ -102,67 +102,6 @@ if not os.path.exists(database_path):
         writer.writerow(default_database)
 
 
-# EXERCISES = {"BS": "Back squat",
-#              "RDL": "Romanian Deadlift",
-#              "BHP": "Barbell Hip Thrust",
-#              "LE": "Leg Extension",
-#              "LLC": "Lying Leg Curl",
-#              "MSHA": "Machine Seated Hip Abduction",
-#              "CR": "Crunch",
-#              "BBP": "Barbell Bench Press",
-#              "LP": "Lat Pulldown",
-#              "MP": "Military Press",
-#              "CSTR": "Chest Supported T-Bar Row",
-#              "CF": "Cable Flye",
-#              "DSC": "Dumbbell Supinated Curl",
-#              "SARTE": "Single Arm Rope Triceps Extension",
-#              "DL": "Deadlift",
-#              "DWL": "Dumbbell Walking Lunge",
-#              "SSLE": "Single Leg Leg Extension",
-#              "SLLLC": "Single Leg Lying Lec Curl",
-#              "SCR": "Standing Calf Raise",
-#              "P": "Plank",
-#              "DIP": "Dumbbell Incline Press",
-#              "RGLP": "Reverse Grip Lat Pulldown",
-#              "AD": "Assisted Dip",
-#              "BBOR": "Barbell Bent Over Row",
-#              "DLR": "Dumbbell Lateral Raise",
-#              "SFP": "Seated Face Pull",
-#              "HC": "Hammer Curl",
-#              "GS": "Goblet Squat",
-#              "DSLHT": "Dumbbell Single Leg Hip Thrust",
-#              "LPR": "Leg Press",
-#              "BC": "Bicycle Crunch",
-#              "SAP": "Single Arm Pulldown",
-#              "DSSP": "Dumbbell Seated Shoulder Press",
-#              "DR": "Dumbbell Row",
-#              "EZBC": "EZ Bar Curl",
-#              "SLC": "Seated Leg Curl",
-#              "HLR": "Hanging Leg Raise",
-#              "NGP": "Neutral Grip Pulldown",
-#              "CSR": "Cable Seated Row",
-#              "CLR": "Cable Lateral Raise",
-#              "RPD": "Reverse Peck Deck",
-#              "SACC": "Single Arm Cable Curl"}
-#
-# database_path = "/home/tomasbajer/PycharmProjects/FitApp/database.csv"
-# database_copy_path = "/home/tomasbajer/PycharmProjects/FitApp/database_copy.csv/"
-# default_database = {'Date': '00.00.0000',
-#                     'Overhead press': {1: (0.0, 0), 2: (0.0, 0), 3: (0.0, 0)},
-#                     'Bench press': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
-#                     'Squat': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
-#                     'Deadlift': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
-#                     'Row': {1: (0, 0), 2: (0, 0), 3: (0, 0)},
-#                     'Farmer': {1: (0, 0), 2: (0, 0), 3: (0, 0)}}
-# if not os.path.exists(database_path):
-#     with open(database_path, "w", newline="") as database:
-#         fieldnames = ["Date", "Overhead press", "Bench press", "Squat",
-#                       "Deadlift", "Row", "Farmer"]
-#         writer = csv.DictWriter(database, fieldnames=fieldnames)
-#         writer.writeheader()
-#         writer.writerow(default_database)
-
-
 class StartExitPage(BoxLayout):
     def __init__(self):
         super().__init__()
@@ -505,11 +444,6 @@ class MainApp(App):
         screen = Screen(name="Date")
         screen.add_widget(self.date_page)
         self.screen_manager.add_widget(screen)
-
-        # self.exercises_page = ExercisesPage()
-        # screen = Screen(name='Exercises')
-        # screen.add_widget(self.exercises_page)
-        # self.screen_manager.add_widget(screen)
 
         self.buttons_page = ButtonsPage()
         screen = Screen(name="Buttons")

@@ -1,10 +1,10 @@
 [app]
 
 # (str) Title of your application
-title = FitApp
+title = FitApp 2.0
 
 # (str) Package name
-package.name = fitapp
+package.name = fitapp-2.0
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = tomas.bajer
@@ -28,7 +28,7 @@ source.include_exts = py,png,jpg,kv,atlas,csv,ttf
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.2.6
+version = 2.0.0
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
