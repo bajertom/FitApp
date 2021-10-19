@@ -22,12 +22,12 @@ exercises = {"BS": "Back squat",
              "BHT": "Barbell Hip Thrust",
              "LE": "Leg Extension",
              "LLC": "Lying Leg Curl",
-             "MSHA": "Machine Seated Hip Abduction",
+             "SHA": "Seated Hip Abduction",
              "C": "Crunch",
              "BBP": "Barbell Bench Press",
              "LP": "Lat Pulldown",
              "MP": "Military Press",
-             "CSTR": "Chest Supported T-Bar Row",
+             "STR": "Supported T-Bar Row",
              "CF": "Cable Flye",
              "DSC": "Dumbbell Supinated Curl",
              "SARTE": "Single Arm Rope Triceps Extension",
@@ -60,11 +60,11 @@ exercises = {"BS": "Back squat",
              "RPD": "Reverse Peck Deck",
              "SACC": "Single Arm Cable Curl"}
 
-Lower1A = [exercises["BS"], exercises["RDL"], exercises["BHT"], exercises["LE"], exercises["LLC"], exercises["MSHA"],
+Lower1A = [exercises["BS"], exercises["RDL"], exercises["BHT"], exercises["LE"], exercises["LLC"], exercises["SHA"],
           exercises["C"]]
-Upper1A = [exercises["BBP"], exercises["LP"], exercises["MP"], exercises["CSTR"], exercises["CF"], exercises["DSC"],
+Upper1A = [exercises["BBP"], exercises["LP"], exercises["MP"], exercises["STR"], exercises["CF"], exercises["DSC"],
           exercises["SARTE"]]
-Lower1B = [exercises["DL"], exercises["DWL"], exercises["SLLE"], exercises["SLLLC"], exercises["MSHA"],
+Lower1B = [exercises["DL"], exercises["DWL"], exercises["SLLE"], exercises["SLLLC"], exercises["SHA"],
            exercises["SCR"], exercises["P"]]
 Upper1B = [exercises["DIP"], exercises["RGLP"], exercises["AD"], exercises["BBOR"], exercises["DLR"], exercises["SFP"],
           exercises["HC"]]
@@ -73,7 +73,7 @@ Lower2A = [exercises["DL"], exercises["GS"], exercises["DSLHT"], exercises["LPR"
 Upper2A = [exercises["BBP"], exercises["SAP"], exercises["DSSP"], exercises["DR"], exercises["AD"], exercises["SFP"],
           exercises["EZBC"]]
 Lower2B = [exercises["BS"], exercises["BHT"], exercises["RDL"], exercises["SLC"], exercises["SCR"], exercises["HLR"],
-          exercises["MSHA"]]
+          exercises["SHA"]]
 Upper2B = [exercises["MP"], exercises["NGP"], exercises["DIP"], exercises["CSR"], exercises["CLR"], exercises["RPD"],
           exercises["SACC"]]
 
@@ -184,16 +184,13 @@ class TrainingsPage(BoxLayout):
 
     def on_button_press_exercises(self, instance):
         chosen_training = instance.text
-        # print(chosen_training)
         for training in all_trainings.keys():
             if chosen_training == training:
                 app.current_training = all_trainings[training]
-        # print(app.current_training)
         app.exercises_page = ExercisesPage()
         screen = Screen(name='Exercises')
         screen.add_widget(app.exercises_page)
         app.screen_manager.add_widget(screen)
-        # print(app.current_training)
         app.screen_manager.current = "Exercises"
 
 class ExercisesPage(GridLayout):
@@ -202,9 +199,7 @@ class ExercisesPage(GridLayout):
         self.cols = 2
         self.spacing = 1
         exercises = app.current_training
-        # print(app.current_training)
         for exercise in exercises:
-            print(exercise)
             previous_set_rep = ast.literal_eval(app.previous_training[exercise])[1]
             # self.exercise_button = Button(text=f"{exercise}")
             self.exercise_button = Button(
@@ -212,20 +207,23 @@ class ExercisesPage(GridLayout):
                 font_size=30, halign="center")
             self.add_widget(self.exercise_button)
             self.exercise_button.bind(on_press=self.on_exercise_press)
-        self.back_button = Button(text="Back")
+        self.back_button = Button(text="Back", font_size=30)
         self.add_widget(self.back_button)
 
     def on_exercise_press(self, instance):
         # Shows the weight and reps for selected exercise from previous training in ButtonsPage
-        app.current_exercise = instance.text.split("\n")[0]
-        dicted_previous_training = ast.literal_eval(app.previous_training[instance.text.split("\n")[0]])
-        dicted_previous_training_stringed = (
-            f"{dicted_previous_training[1][0]}: {dicted_previous_training[1][1]}    "
-            f"{dicted_previous_training[2][0]}: {dicted_previous_training[2][1]}    "
-            f"{dicted_previous_training[3][0]}: {dicted_previous_training[3][1]}    "
-            )
-        app.buttons_page.last_training_displayed.text = f"Last training weights and reps:\n{dicted_previous_training_stringed}"
-        app.screen_manager.current = "Weight"
+        if instance.text == "Back":
+            app.screen_manager.current = "Trainings"
+        else:
+            app.current_exercise = instance.text.split("\n")[0]
+            dicted_previous_training = ast.literal_eval(app.previous_training[instance.text.split("\n")[0]])
+            dicted_previous_training_stringed = (
+                f"{dicted_previous_training[1][0]}: {dicted_previous_training[1][1]}    "
+                f"{dicted_previous_training[2][0]}: {dicted_previous_training[2][1]}    "
+                f"{dicted_previous_training[3][0]}: {dicted_previous_training[3][1]}    "
+                )
+            app.buttons_page.last_training_displayed.text = f"Last training weights and reps:\n{dicted_previous_training_stringed}"
+            app.screen_manager.current = "Weight"
 
 
 class WeightPage(BoxLayout):
@@ -324,10 +322,7 @@ class ButtonsPage(BoxLayout):
                         exercise_object.background_color = (0.31, 0.74, 0.2, 1)
                 app.set_counter = 1
                 app.overall_training[app.current_exercise] = app.current_exercise_dict
-                print(app.overall_training)
-                print(app.current_training)
                 app.exercise_counter += 1
-                print(app.exercise_counter)
                 app.current_exercise_dict = {}
                 app.screen_manager.current = "Exercises"
             #  Calculates the difference between this and previous workout, once completed
@@ -426,9 +421,7 @@ class MainApp(App):
             reader = csv.DictReader(database)
             for row in reader:
                 self.previous_training = row
-            print(self.previous_training)
             self.overall_training = self.previous_training
-            print(self.overall_training)
 
         self.screen_manager = ScreenManager()
 
