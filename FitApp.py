@@ -329,9 +329,9 @@ class ButtonsPage(BoxLayout):
                 app.current_exercise_dict = {}
                 app.screen_manager.current = "Exercises"
             #  Calculates the difference between this and previous workout, once completed
-            if app.exercise_counter == 8:
+                if app.exercise_counter >= 8:
                 # app.difference_page.diff_calculation(app.previous_training, app.overall_training)
-                app.screen_manager.current = "Difference"
+                    app.screen_manager.current = "Exit"
         else:
             self.entered_reps.text += button_pressed
 
@@ -352,6 +352,30 @@ class TimerPage(BoxLayout):
 
     def on_button_press(self, instance):
         app.screen_manager.current = "Buttons"
+
+
+class ExitPage(BoxLayout):
+    def __init__(self):
+        super().__init__()
+        self.orientation = "vertical"
+
+        self.weight_label = Label(text="Finish training?", font_size=30)
+        self.add_widget(self.weight_label)
+
+        yes_button = Button(text="Yes", font_size=30)
+        self.add_widget(yes_button)
+        yes_button.bind(on_press=self.on_button_press)
+
+        no_button = Button(text="No", font_size=30)
+        self.add_widget(no_button)
+        no_button.bind(on_press=self.on_button_press)
+
+    def on_button_press(self, instance):
+        button_pressed = instance.text
+        if button_pressed == "Yes":
+            app.screen_manager.current = "Difference"
+        elif button_pressed == "No":
+            app.screen_manager.current = "Exercises"
 
 
 class DifferencePage(BoxLayout):
@@ -459,6 +483,11 @@ class MainApp(App):
         self.trainings_page = TrainingsPage()
         screen = Screen(name="Trainings")
         screen.add_widget(self.trainings_page)
+        self.screen_manager.add_widget(screen)
+
+        self.exit_page = ExitPage()
+        screen = Screen(name="Exit")
+        screen.add_widget(self.exit_page)
         self.screen_manager.add_widget(screen)
 
         return self.screen_manager
