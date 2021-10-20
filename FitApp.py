@@ -189,9 +189,9 @@ class TrainingsPage(BoxLayout):
             if chosen_training == training:
                 app.current_training = all_trainings[training]
         app.exercises_page = ExercisesPage()
-        screen = Screen(name='Exercises')
-        screen.add_widget(app.exercises_page)
-        app.screen_manager.add_widget(screen)
+        app.exe_screen = Screen(name='Exercises')
+        app.exe_screen.add_widget(app.exercises_page)
+        app.screen_manager.add_widget(app.exe_screen)
         app.screen_manager.current = "Exercises"
 
 
@@ -218,6 +218,7 @@ class ExercisesPage(GridLayout):
         # Shows the weight and reps for selected exercise from previous training in ButtonsPage
         if instance.text == "Back":
             app.screen_manager.current = "Trainings"
+            app.screen_manager.remove_widget(app.exe_screen)
         else:
             app.current_exercise = instance.text.split("\n")[0]
             dicted_previous_training = ast.literal_eval(app.previous_training[instance.text.split("\n")[0]])
@@ -327,7 +328,6 @@ class ButtonsPage(BoxLayout):
                 app.set_counter = 1
                 app.overall_training[app.current_exercise] = app.current_exercise_dict
                 app.exercise_counter += 1
-                print(app.exercise_counter)
                 app.current_exercise_dict = {}
                 app.screen_manager.current = "Exercises"
             #  Calculates the difference between this and previous workout, once completed

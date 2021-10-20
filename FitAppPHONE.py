@@ -149,7 +149,7 @@ class DatePage(BoxLayout):
     def on_button_press_date(self, instance):
         button_pressed = instance.text
         if button_pressed == "Enter":
-            if len(self.entered_date.text) != 10:
+            if len(self.entered_date.text) != 1:
                 pass
             else:
                 app.todays_date = self.entered_date.text
@@ -188,9 +188,9 @@ class TrainingsPage(BoxLayout):
             if chosen_training == training:
                 app.current_training = all_trainings[training]
         app.exercises_page = ExercisesPage()
-        screen = Screen(name='Exercises')
-        screen.add_widget(app.exercises_page)
-        app.screen_manager.add_widget(screen)
+        app.exe_screen = Screen(name='Exercises')
+        app.exe_screen.add_widget(app.exercises_page)
+        app.screen_manager.add_widget(app.exe_screen)
         app.screen_manager.current = "Exercises"
 
 class ExercisesPage(GridLayout):
@@ -209,11 +209,13 @@ class ExercisesPage(GridLayout):
             self.exercise_button.bind(on_press=self.on_exercise_press)
         self.back_button = Button(text="Back", font_size=30)
         self.add_widget(self.back_button)
+        self.back_button.bind(on_press=self.on_exercise_press)
 
     def on_exercise_press(self, instance):
         # Shows the weight and reps for selected exercise from previous training in ButtonsPage
         if instance.text == "Back":
             app.screen_manager.current = "Trainings"
+            app.screen_manager.remove_widget(app.exe_screen)
         else:
             app.current_exercise = instance.text.split("\n")[0]
             dicted_previous_training = ast.literal_eval(app.previous_training[instance.text.split("\n")[0]])
