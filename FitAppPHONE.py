@@ -218,8 +218,8 @@ class ExercisesPage(GridLayout):
             app.screen_manager.current = "Trainings"
             app.screen_manager.remove_widget(app.exe_screen)
         else:
-            app.current_exercise = instance.text.split("\n")[0]
-            dicted_previous_training = ast.literal_eval(app.previous_training[instance.text.split("\n")[0]])
+            app.current_exercise = instance.text.split("\n\n")[0]
+            dicted_previous_training = ast.literal_eval(app.previous_training[app.current_exercise])
             dicted_previous_training_stringed = (
                 f"{dicted_previous_training[1][0]}: {dicted_previous_training[1][1]}    "
                 f"{dicted_previous_training[2][0]}: {dicted_previous_training[2][1]}    "
