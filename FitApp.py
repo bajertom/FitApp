@@ -202,7 +202,7 @@ class ExercisesPage(GridLayout):
         self.spacing = 1
         exercises = app.current_training
         for exercise in exercises:
-            previous_set_rep = ast.literal_eval(app.previous_training[exercise])[1]
+            previous_set_rep = ast.literal_eval(str(app.previous_training[exercise]))[1]
             self.exercise_button = Button(
                 text=f"{exercise}\n\nWeight: {previous_set_rep[0]}\nReps: {previous_set_rep[1]}",
                 font_size=30, halign="center")
