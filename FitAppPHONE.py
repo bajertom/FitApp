@@ -219,7 +219,7 @@ class ExercisesPage(GridLayout):
             app.screen_manager.remove_widget(app.exe_screen)
         else:
             app.current_exercise = instance.text.split("\n\n")[0]
-            dicted_previous_training = ast.literal_eval(app.previous_training[app.current_exercise])
+            dicted_previous_training = ast.literal_eval(str(app.previous_training[app.current_exercise]))
             dicted_previous_training_stringed = (
                 f"{dicted_previous_training[1][0]}: {dicted_previous_training[1][1]}    "
                 f"{dicted_previous_training[2][0]}: {dicted_previous_training[2][1]}    "
@@ -320,7 +320,7 @@ class ButtonsPage(BoxLayout):
             # Turns the exercise tile to green colour after finishing it
             if app.set_counter == 4:
                 for exercise_object in app.exercises_page.children:
-                    if exercise_object.text.split("\n")[0] == app.current_exercise:
+                    if exercise_object.text.split("\n\n")[0] == app.current_exercise:
                         exercise_object.background_normal = ""
                         exercise_object.background_color = (0.31, 0.74, 0.2, 1)
                 app.set_counter = 1
