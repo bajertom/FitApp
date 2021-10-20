@@ -22,7 +22,7 @@ exercises = {"BS": "Back squat",
              "BHT": "Barbell Hip Thrust",
              "LE": "Leg Extension",
              "LLC": "Lying Leg Curl",
-             "SHA": "Seated Hip Abduction",
+             "MSHA": "Machine Seated \nHip Abduction",
              "C": "Crunch",
              "BBP": "Barbell Bench Press",
              "LP": "Lat Pulldown",
@@ -30,7 +30,7 @@ exercises = {"BS": "Back squat",
              "STR": "Supported T-Bar Row",
              "CF": "Cable Flye",
              "DSC": "Dumbbell Supinated Curl",
-             "SARTE": "Single Arm Rope Triceps Extension",
+             "SARTE": "Single Arm Rope \nTriceps Extension",
              "DL": "Deadlift",
              "DWL": "Dumbbell Walking Lunge",
              "SLLE": "Single Leg Leg Extension",
@@ -38,18 +38,18 @@ exercises = {"BS": "Back squat",
              "SCR": "Standing Calf Raise",
              "P": "Plank",
              "DIP": "Dumbbell Incline Press",
-             "RGLP": "Reverse Grip Lat Pulldown",
+             "RGLP": "Reverse Grip \nLat Pulldown",
              "AD": "Assisted Dip",
              "BBOR": "Barbell Bent Over Row",
              "DLR": "Dumbbell Lateral Raise",
              "SFP": "Seated Face Pull",
              "HC": "Hammer Curl",
              "GS": "Goblet Squat",
-             "DSLHT": "Dumbbell Single Leg Hip Thrust",
+             "DSLHT": "Dumbbell Single Leg \nHip Thrust",
              "LPR": "Leg Press",
              "BC": "Bicycle Crunch",
              "SAP": "Single Arm Pulldown",
-             "DSSP": "Dumbbell Seated Shoulder Press",
+             "DSSP": "Dumbbell Seated \nShoulder Press",
              "DR": "Dumbbell Row",
              "EZBC": "EZ Bar Curl",
              "SLC": "Seated Leg Curl",
@@ -60,11 +60,11 @@ exercises = {"BS": "Back squat",
              "RPD": "Reverse Peck Deck",
              "SACC": "Single Arm Cable Curl"}
 
-Lower1A = [exercises["BS"], exercises["RDL"], exercises["BHT"], exercises["LE"], exercises["LLC"], exercises["SHA"],
+Lower1A = [exercises["BS"], exercises["RDL"], exercises["BHT"], exercises["LE"], exercises["LLC"], exercises["MSHA"],
           exercises["C"]]
 Upper1A = [exercises["BBP"], exercises["LP"], exercises["MP"], exercises["STR"], exercises["CF"], exercises["DSC"],
           exercises["SARTE"]]
-Lower1B = [exercises["DL"], exercises["DWL"], exercises["SLLE"], exercises["SLLLC"], exercises["SHA"],
+Lower1B = [exercises["DL"], exercises["DWL"], exercises["SLLE"], exercises["SLLLC"], exercises["MSHA"],
            exercises["SCR"], exercises["P"]]
 Upper1B = [exercises["DIP"], exercises["RGLP"], exercises["AD"], exercises["BBOR"], exercises["DLR"], exercises["SFP"],
           exercises["HC"]]
@@ -73,7 +73,7 @@ Lower2A = [exercises["DL"], exercises["GS"], exercises["DSLHT"], exercises["LPR"
 Upper2A = [exercises["BBP"], exercises["SAP"], exercises["DSSP"], exercises["DR"], exercises["AD"], exercises["SFP"],
           exercises["EZBC"]]
 Lower2B = [exercises["BS"], exercises["BHT"], exercises["RDL"], exercises["SLC"], exercises["SCR"], exercises["HLR"],
-          exercises["SHA"]]
+          exercises["MSHA"]]
 Upper2B = [exercises["MP"], exercises["NGP"], exercises["DIP"], exercises["CSR"], exercises["CLR"], exercises["RPD"],
           exercises["SACC"]]
 
@@ -162,6 +162,7 @@ class DatePage(BoxLayout):
         else:
             self.entered_date.text += button_pressed
 
+
 class TrainingsPage(BoxLayout):
     def __init__(self):
         super().__init__()
@@ -193,6 +194,7 @@ class TrainingsPage(BoxLayout):
         app.screen_manager.add_widget(app.exe_screen)
         app.screen_manager.current = "Exercises"
 
+
 class ExercisesPage(GridLayout):
     def __init__(self):
         super().__init__()
@@ -201,7 +203,6 @@ class ExercisesPage(GridLayout):
         exercises = app.current_training
         for exercise in exercises:
             previous_set_rep = ast.literal_eval(app.previous_training[exercise])[1]
-            # self.exercise_button = Button(text=f"{exercise}")
             self.exercise_button = Button(
                 text=f"{exercise}\n\nWeight: {previous_set_rep[0]}\nReps: {previous_set_rep[1]}",
                 font_size=30, halign="center")
@@ -394,8 +395,6 @@ class DifferencePage(BoxLayout):
 
     def save_quit(self, instance):
         with open(database_path, "a", newline="") as database:
-            # fieldnames = ["Date", "Overhead press", "Bench press", "Squat",
-            #               "Deadlift", "Row", "Farmer"]
             fieldnames = [x for x in exercises.values()]
             fieldnames.append("Date")
             writer = csv.DictWriter(database, fieldnames=fieldnames)
