@@ -149,7 +149,7 @@ class DatePage(BoxLayout):
     def on_button_press_date(self, instance):
         button_pressed = instance.text
         if button_pressed == "Enter":
-            if len(self.entered_date.text) != 1:
+            if len(self.entered_date.text) != 10:
                 pass
             else:
                 app.todays_date = self.entered_date.text

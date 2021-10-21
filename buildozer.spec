@@ -1,10 +1,10 @@
 [app]
 
 # (str) Title of your application
-title = FitApp 2.0
+title = FitApp
 
 # (str) Package name
-package.name = fitapp-2.0
+package.name = fitapp
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = tomas.bajer
@@ -85,7 +85,7 @@ fullscreen = 0
 #android.presplash_color = #FFFFFF
 
 # (list) Permissions
-#android.permissions = INTERNET
+android.permissions = READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,INTERNET
 
 # (int) Target Android API, should be as high as possible.
 #android.api = 27
